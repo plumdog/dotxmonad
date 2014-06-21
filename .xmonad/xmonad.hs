@@ -2,10 +2,13 @@ import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Util.CustomKeys
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.DynamicLog
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Layout
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
+
+import System.IO
 
 
 myterm = "gnome-terminal"
@@ -27,6 +30,15 @@ myGrid = spacing 8 Grid
 myTabbed = simpleTabbed
 myLayout = myTabbed ||| myGrid
 
+xmobarEscape = concatMap doubleLts
+  where doubleLts '<' = "<<"
+        doubleLts x   = [x]
+
+myWorkspaces :: [String]
+myWorkspaces = clickable . (map xmobarEscape) $ ["1","2","3","4","5"]
+  where
+    clickable l = [ "<action=xdotool key alt+" ++ show (n) ++ ">" ++ ws ++ "</action>" | (i,ws) <- zip [1..5] l, let n = i ]
+
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
   xmonad $ defaultConfig {
@@ -35,7 +47,15 @@ main = do
     keys = customKeys delkeys inskeys,
     -- to fix xmobar
     manageHook = manageDocks <+> manageHook defaultConfig,
-    layoutHook = avoidStruts myLayout
+    layoutHook = avoidStruts myLayout,
     -- done
+    workspaces = myWorkspaces,
+    logHook = dynamicLogWithPP xmobarPP
+                        { ppOutput = hPutStrLn xmproc
+                        , ppCurrent = xmobarColor "yellow" "" . wrap "[" "]"
+                        , ppHiddenNoWindows = xmobarColor "grey" ""
+                        , ppTitle   = xmobarColor "green"  "" . shorten 40
+                        , ppVisible = wrap "(" ")"
+                        , ppUrgent  = xmobarColor "red" "yellow"
+                        }
   }
-
