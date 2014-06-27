@@ -22,13 +22,22 @@ inskeys conf@(XConfig {modMask = modm}) =
     ((modm .|. shiftMask, xK_d), spawn (myterm ++ " -e 'ssh dev'")),
     ((modm, xK_a), spawn "/usr/bin/gmrun"),
     ((modm, xK_l), spawn "/usr/bin/slock"),
+    ((modm, xK_f), spawn "/usr/bin/firefox"),
     ((modm, xK_k), spawn "/usr/bin/keepassx"),
     ((modm, xK_z), spawn "/usr/bin/gnome-control-center")
   ]
 
 myGrid = spacing 8 Grid
+mySideBySide = spacing 8 (Tall nmaster delta ratio)
+    where
+        -- The default number of windows in the master pane
+        nmaster = 1
+        -- Percent of screen to increment by when resizing panes
+        delta   = 3/100
+        -- Default proportion of screen occupied by master pane
+        ratio   = 60/100
 myTabbed = simpleTabbed
-myLayout = myTabbed ||| myGrid
+myLayout = myTabbed ||| myGrid ||| mySideBySide
 
 xmobarEscape = concatMap doubleLts
   where doubleLts '<' = "<<"
