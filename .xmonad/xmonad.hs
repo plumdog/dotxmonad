@@ -1,6 +1,7 @@
 import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Util.CustomKeys
+import XMonad.Actions.CycleWS
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Run
@@ -20,6 +21,7 @@ inskeys conf@(XConfig {modMask = modm}) =
   [
     ((modm .|. shiftMask, xK_t), spawn myterm),
     ((modm .|. shiftMask, xK_d), spawn (myterm ++ " -e 'ssh dev'")),
+    ((modm, xK_n), nextScreen),
     ((modm, xK_a), spawn "/usr/bin/gmrun"),
     ((modm, xK_l), spawn "/usr/bin/slock"),
     ((modm, xK_f), spawn "/usr/bin/firefox"),
