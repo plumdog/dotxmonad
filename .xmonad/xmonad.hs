@@ -3,7 +3,7 @@ import XMonad.Layout.Spacing
 import XMonad.Util.CustomKeys
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
-import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Run
 import XMonad.Layout
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
@@ -49,6 +49,7 @@ myWorkspaces = clickable . (map xmobarEscape) $ ["1","2","3","4","5"]
     clickable l = [ "<action=xdotool key alt+" ++ show (n) ++ ">" ++ ws ++ "</action>" | (i,ws) <- zip [1..5] l, let n = i ]
 
 main = do
+  spawn "/home/andrew/.xinitrc"
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
   xmonad $ defaultConfig {
     modMask = mod4Mask,
