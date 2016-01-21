@@ -2,17 +2,24 @@ import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Util.CustomKeys
 import XMonad.Actions.CycleWS
+import XMonad.Actions.SpawnOn
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Run
 import XMonad.Layout
 import XMonad.Layout.Grid
 import XMonad.Layout.Tabbed
+import XMonad.Hooks.EwmhDesktops
 
 import System.IO
 
 
-myterm = "gnome-terminal"
+myterm = "gnome-terminal --hide-menubar"
+mybrowser = "google-chrome"
+myfind = "gmrun"
+mylock = "slock"
+mypasswords = "keepassx"
+myconfig = "gnome-control-center"
 
 delkeys :: XConfig l -> [(KeyMask, KeySym)]
 delkeys XConfig {modMask = modm} = []
@@ -20,13 +27,12 @@ inskeys :: XConfig l -> [((KeyMask, KeySym), X ())]
 inskeys conf@(XConfig {modMask = modm}) =
   [
     ((modm .|. shiftMask, xK_t), spawn myterm),
-    ((modm .|. shiftMask, xK_d), spawn (myterm ++ " -e 'ssh dev'")),
     ((modm, xK_n), nextScreen),
-    ((modm, xK_a), spawn "/usr/bin/gmrun"),
-    ((modm, xK_l), spawn "/usr/bin/slock"),
-    ((modm, xK_f), spawn "/usr/bin/firefox"),
-    ((modm, xK_k), spawn "/usr/bin/keepassx"),
-    ((modm, xK_z), spawn "/usr/bin/gnome-control-center")
+    ((modm, xK_a), spawn myfind),
+    ((modm .|. shiftMask, xK_l), spawn mylock),
+    ((modm, xK_f), spawn mybrowser),
+    ((modm, xK_k), spawn mypasswords),
+    ((modm, xK_z), spawn myconfig)
   ]
 
 myGrid = spacing 8 Grid
@@ -45,20 +51,31 @@ xmobarEscape = concatMap doubleLts
   where doubleLts '<' = "<<"
         doubleLts x   = [x]
 
-myWorkspaces :: [String]
-myWorkspaces = clickable . (map xmobarEscape) $ ["1","2","3","4","5"]
-  where
-    clickable l = [ "<action=xdotool key alt+" ++ show (n) ++ ">" ++ ws ++ "</action>" | (i,ws) <- zip [1..5] l, let n = i ]
+myWorkspaces = [one, two, three, four, five]
+one = "1"
+two = "2"
+three = "3"
+four = "4"
+five = "5"
+
+myStartupHook = do
+    spawn "/home/andrew/.xinitrc"
+    spawnOn one myterm
+    spawnOn two mybrowser
+    -- spawn browser instances with slack and gmail
+    spawn "/home/andrew/bin/comms"
+    spawnOn four mypasswords
+    -- run again!
+    spawn "/home/andrew/.xinitrc"
 
 main = do
-  spawn "/home/andrew/.xinitrc"
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
-  xmonad $ defaultConfig {
+  xmonad $ ewmh defaultConfig {
     modMask = mod4Mask,
     terminal = myterm,
     keys = customKeys delkeys inskeys,
     -- to fix xmobar
-    manageHook = manageDocks <+> manageHook defaultConfig,
+    manageHook = manageDocks <+> manageSpawn <+> manageHook defaultConfig,
     layoutHook = avoidStruts myLayout,
     -- done
     workspaces = myWorkspaces,
@@ -69,5 +86,6 @@ main = do
                         , ppTitle   = xmobarColor "green"  "" . shorten 40
                         , ppVisible = wrap "(" ")"
                         , ppUrgent  = xmobarColor "red" "yellow"
-                        }
+                        },
+    startupHook = myStartupHook
   }
