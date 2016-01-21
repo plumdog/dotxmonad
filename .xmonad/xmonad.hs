@@ -13,6 +13,8 @@ import XMonad.Hooks.EwmhDesktops
 
 import System.IO
 
+import Graphics.X11.ExtraTypes.XF86
+
 
 myterm = "gnome-terminal --hide-menubar"
 mybrowser = "google-chrome"
@@ -32,7 +34,10 @@ inskeys conf@(XConfig {modMask = modm}) =
     ((modm .|. shiftMask, xK_l), spawn mylock),
     ((modm, xK_f), spawn mybrowser),
     ((modm, xK_k), spawn mypasswords),
-    ((modm, xK_z), spawn myconfig)
+    ((modm, xK_z), spawn myconfig),
+    ((0,    xF86XK_AudioMute), spawn "pactl set-sink-mute 0 toggle"),  -- mute
+    ((0,    xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume 0 -1.5%"),  -- vol down
+    ((0,    xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume 0 +1.5%")  -- vol up
   ]
 
 myGrid = spacing 8 Grid
