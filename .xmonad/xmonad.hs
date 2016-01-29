@@ -71,6 +71,7 @@ myStartupHook = do
     spawn mystartup
     -- run again!
     spawn "/home/andrew/.xinitrc"
+    spawn "dropbox start"
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
