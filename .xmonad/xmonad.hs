@@ -22,6 +22,7 @@ myfind = "gmrun"
 mylock = "slock"
 mypasswords = "keepassx"
 myconfig = "gnome-control-center"
+mystartup = "/home/andrew/.startup.sh"
 
 delkeys :: XConfig l -> [(KeyMask, KeySym)]
 delkeys XConfig {modMask = modm} = []
@@ -35,6 +36,7 @@ inskeys conf@(XConfig {modMask = modm}) =
     ((modm, xK_f), spawn mybrowser),
     ((modm, xK_k), spawn mypasswords),
     ((modm, xK_z), spawn myconfig),
+    ((modm, xK_g), spawn (mystartup ++ " call")),
     ((0,    xF86XK_AudioMute), spawn "pactl set-sink-mute 0 toggle"),  -- mute
     ((0,    xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume 0 -1.5%"),  -- vol down
     ((0,    xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume 0 +1.5%")  -- vol up
@@ -63,13 +65,10 @@ three = "3"
 four = "4"
 five = "5"
 
+
 myStartupHook = do
     spawn "/home/andrew/.xinitrc"
-    spawnOn one myterm
-    spawnOn two mybrowser
-    -- spawn browser instances with slack and gmail
-    spawn "/home/andrew/bin/comms"
-    spawnOn four mypasswords
+    spawn mystartup
     -- run again!
     spawn "/home/andrew/.xinitrc"
 
