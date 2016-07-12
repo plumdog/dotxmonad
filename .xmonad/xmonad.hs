@@ -36,7 +36,6 @@ inskeys conf@(XConfig {modMask = modm}) =
     ((modm, xK_f), spawn mybrowser),
     ((modm, xK_k), spawn mypasswords),
     ((modm, xK_z), spawn myconfig),
-    ((modm, xK_g), spawn (mystartup ++ " call")),
     ((0,    xF86XK_AudioMute), spawn "pactl set-sink-mute 0 toggle"),  -- mute
     ((0,    xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume 0 -1.5%"),  -- vol down
     ((0,    xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume 0 +1.5%")  -- vol up
