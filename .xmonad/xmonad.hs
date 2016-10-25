@@ -84,6 +84,7 @@ main = do
     layoutHook = avoidStruts myLayout,
     -- done
     workspaces = myWorkspaces,
+    handleEventHook = docksEventHook <+> handleEventHook defaultConfig,
     logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppCurrent = xmobarColor "yellow" "" . wrap "[" "]"
