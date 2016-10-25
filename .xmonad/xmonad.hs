@@ -53,7 +53,8 @@ mySideBySide = spacing 8 (Tall nmaster delta ratio)
 myTabbed = simpleTabbed
 myLayout = myTabbed ||| myGrid ||| mySideBySide
 
-xmobarEscape = concatMap doubleLts
+
+xmobarEscape xs = concatMap doubleLts xs
   where doubleLts '<' = "<<"
         doubleLts x   = [x]
 
