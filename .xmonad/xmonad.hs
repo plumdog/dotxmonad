@@ -80,7 +80,6 @@ main = do
     terminal = myterm,
     keys = customKeys delkeys inskeys,
     -- to fix xmobar
-    manageHook = manageDocks <+> manageSpawn <+> manageHook defaultConfig,
     layoutHook = avoidStruts myLayout,
     -- done
     workspaces = myWorkspaces,
