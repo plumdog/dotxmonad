@@ -1,5 +1,5 @@
 Config {
-       font = "-misc-fixed-*-*-*-*-14-*-*-*-*-*-*-*"
+       font = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
        , bgColor = "black"
        , fgColor = "grey"
        , position = Top

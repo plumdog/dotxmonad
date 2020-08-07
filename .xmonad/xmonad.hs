@@ -17,7 +17,8 @@ import Graphics.X11.ExtraTypes.XF86
 
 
 myterm = "gnome-terminal --hide-menubar"
-mybrowser = "google-chrome"
+-- mybrowser = "google-chrome"
+mybrowser = "firefox"
 myfind = "dmenu_run"
 mylock = "slock"
 mypasswords = "keepassx"
@@ -31,6 +32,7 @@ inskeys conf@(XConfig {modMask = modm}) =
   [
     ((modm .|. shiftMask, xK_t), spawn myterm),
     ((modm, xK_n), nextScreen),
+    ((modm, xK_p), prevScreen),
     ((modm, xK_a), spawn myfind),
     ((modm .|. shiftMask, xK_l), spawn mylock),
     ((modm, xK_f), spawn mybrowser),
@@ -50,7 +52,7 @@ mySideBySide = spacing 8 (Tall nmaster delta ratio)
         delta   = 3/100
         -- Default proportion of screen occupied by master pane
         ratio   = 60/100
-myTabbed = simpleTabbed
+myTabbed = tabbed shrinkText $ def { fontName = "xft:Dejavu Sans Mono-8" }
 myLayout = myTabbed ||| myGrid ||| mySideBySide
 
 
@@ -71,11 +73,11 @@ myStartupHook = do
     spawn mystartup
     -- run again!
     spawn "/home/andrew/.xinitrc"
-    spawn "dropbox start"
+    -- spawn "dropbox start"
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
-  xmonad $ ewmh defaultConfig {
+  xmonad $ docks $ ewmh defaultConfig {
     modMask = mod4Mask,
     terminal = myterm,
     keys = customKeys delkeys inskeys,
