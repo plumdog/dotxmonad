@@ -69,6 +69,7 @@ five = "5"
 
 
 myStartupHook = do
+    spawn "/usr/bin/dunst"
     spawn "/home/andrew/.xinitrc"
     spawn mystartup
     -- run again!
