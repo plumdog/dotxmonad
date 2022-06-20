@@ -75,6 +75,7 @@ myStartupHook = do
     -- run again!
     spawn "/home/andrew/.xinitrc"
     -- spawn "dropbox start"
+    spawn "/home/andrew/bin/etc_hosts_notify.sh"
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
