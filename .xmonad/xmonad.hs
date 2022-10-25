@@ -80,15 +80,13 @@ myStartupHook = do
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/andrew/.xmobarrc"
-  xmonad $ docks $ ewmh defaultConfig {
+  xmonad $ ewmh . docks $ def {
     modMask = mod4Mask,
     terminal = myterm,
     keys = customKeys delkeys inskeys,
-    -- to fix xmobar
     layoutHook = avoidStruts myLayout,
-    -- done
     workspaces = myWorkspaces,
-    handleEventHook = docksEventHook <+> handleEventHook defaultConfig,
+    manageHook = manageDocks <+> manageHook def,
     logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppCurrent = xmobarColor "yellow" "" . wrap "[" "]"
