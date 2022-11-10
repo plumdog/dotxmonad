@@ -17,8 +17,8 @@ import Graphics.X11.ExtraTypes.XF86
 
 
 myterm = "gnome-terminal --hide-menubar"
--- mybrowser = "google-chrome"
-mybrowser = "firefox"
+mybrowser = "google-chrome"
+-- mybrowser = "firefox"
 myfind = "dmenu_run"
 mylock = "xsecurelock"
 mypasswords = "keepassx"
